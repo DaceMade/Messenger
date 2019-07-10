@@ -28,20 +28,14 @@ class ClientConnect {
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.getNickname();
-            new ReadMsg().start();
-            new WriteMsg().start();
-
         } catch (IOException e) {
             ClientConnect.this.downService();
             e.printStackTrace();
-
         }
-
-
     }
 
-    private class ReadMsg extends Thread {
+    //msg form server to console
+    public class ReadMsg extends Thread {
         @Override
         public void run() {
             String word;
@@ -56,13 +50,14 @@ class ClientConnect {
                     System.out.println(word);
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    break;
                 }
             }
         }
     }
 
-    private class WriteMsg extends Thread {
+    //msg from console to server
+    public class WriteMsg extends Thread {
         @Override
         public void run() {
             while (true) {
@@ -70,7 +65,8 @@ class ClientConnect {
                 try {
                     word = reader.readLine();
                     if (word.equals("!disconnect")) {
-                        out.write("Disconnect" + "\n");
+                        out.write("!disconnect" + "\n");
+                        out.flush();
                         ClientConnect.this.downService();
                         break;
                     } else {
@@ -79,6 +75,7 @@ class ClientConnect {
                     out.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
         }
@@ -99,9 +96,15 @@ class ClientConnect {
         System.out.print("Enter your nick: ");
         try {
             userName = reader.readLine();
-            out.write("Hello " + userName + "\n");
+            out.write(userName + " is connected" + "\n");
             out.flush();
         } catch (IOException ignored) {
         }
+    }
+
+    void msgThreadStart() {
+        this.getNickname();
+        new ReadMsg().start();
+        new WriteMsg().start();
     }
 }

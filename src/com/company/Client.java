@@ -6,6 +6,6 @@ public class Client {
     private static final String IP = "localhost";
 
     public static void main(String[] args) {
-        new ClientConnect(IP,PORT);
+        new ClientConnect(IP, PORT).msgThreadStart();
     }
 }
