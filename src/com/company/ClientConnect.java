@@ -32,6 +32,7 @@ class ClientConnect {
             ClientConnect.this.downService();
             e.printStackTrace();
         }
+
     }
 
     //msg form server to console
