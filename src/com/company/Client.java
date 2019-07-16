@@ -9,8 +9,9 @@ public class Client {
 
 
     public static void main(String[] args) {
-        Render render = new Render();
-        new ClientConnect(IP, PORT).msgThreadStart();
+        Server server = new Server(IP, PORT);
+        server.connect();
+        new LoginDialog(server).setVisible(true);
     }
 
 
