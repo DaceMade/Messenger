@@ -39,7 +39,7 @@ public class ChatWindow extends JFrame {
             switch (command) {
                 case ServerCommands.SEND_MESSAGE:
                     String data = (String) message.getData();
-                    data = userName + ": " + data + "\n";
+                    data = data + "\n";
                     System.out.println(data);
                     chatArea.setText(chatArea.getText() + data);
                     break;
@@ -60,7 +60,7 @@ public class ChatWindow extends JFrame {
                     userName = userNameField.getText();
                     userNameField.setEditable(false);
                     String word = messageField.getText();
-                    server.sendMessage(new ServerMessage(ServerCommands.SEND_MESSAGE, word));
+                    server.sendMessage(new ServerMessage(ServerCommands.SEND_MESSAGE, userName + ": " + word));
                     messageField.setText("");
                 }
             }

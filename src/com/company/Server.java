@@ -1,12 +1,9 @@
 package com.company;
 
-import jdk.nashorn.internal.codegen.CompilerConstants;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -50,15 +47,17 @@ public class Server {
             }
 
 
-            in = new ObjectInputStream(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
             new Thread(sending).start();
             new Thread(receiving).start();
         } catch (IOException e) {
+            e.printStackTrace();
             disconnect();
         }
     }
 
+    //from client to server
     private Runnable sending = () -> {
         while (true) {
             try {
@@ -73,6 +72,7 @@ public class Server {
         }
     };
 
+    //from server to client
     private Runnable receiving = () -> {
         while (!Thread.currentThread().isInterrupted()) {
             try {
