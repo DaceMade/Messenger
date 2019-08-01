@@ -7,7 +7,10 @@ import java.util.Arrays;
 
 public class RegistrationDialog extends JFrame {
 
-    public RegistrationDialog() {
+    private Server server;
+
+    public RegistrationDialog(Server server) {
+        this.server = server;
         setTitle("Registration");
         setLocationRelativeTo(null);
         JLabel loginLabel = new JLabel("Login:");
@@ -36,8 +39,15 @@ public class RegistrationDialog extends JFrame {
         add(regPanel, BorderLayout.NORTH);
 
         registrationButton.addActionListener(e -> {
-            if (!Arrays.equals(passwordField.getPassword(), passwordAgainField.getPassword())) {
+            if (login.getText().equals("") || passwordAgainField.getPassword().equals("") || passwordField.equals("")) {
+                JOptionPane.showMessageDialog(this, "Fill in all the fields");
+            } else if (!Arrays.equals(passwordField.getPassword(), passwordAgainField.getPassword())) {
                 JOptionPane.showMessageDialog(this, "Passwords do not match");
+            }else {
+                //Data for registration
+                LoginSet loginSet = new LoginSet(login.getText(), Arrays.toString(passwordField.getPassword()));
+                server.sendMessage(new ServerMessage(ServerCommands.REGISTER,loginSet));
+                dispose();
             }
         });
 

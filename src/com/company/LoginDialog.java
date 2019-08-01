@@ -35,7 +35,7 @@ public class LoginDialog extends JFrame {
         add(panel, BorderLayout.NORTH);
 
         registrationButton.addActionListener(e -> {
-            new RegistrationDialog().setVisible(true);
+            new RegistrationDialog(server).setVisible(true);
         });
 
         loginButton.addActionListener(e -> {
