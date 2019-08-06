@@ -12,4 +12,11 @@ public class LoginSet implements Serializable {
         this.password = password;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

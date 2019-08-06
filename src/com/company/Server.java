@@ -110,7 +110,7 @@ public class Server {
         }
     }
 
-    interface Callback {
+   public interface Callback {
         void onReceive(ServerMessage message);
     }
 }
