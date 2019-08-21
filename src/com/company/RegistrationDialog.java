@@ -35,8 +35,21 @@ public class RegistrationDialog extends JFrame {
 
         add(regPanel, BorderLayout.NORTH);
 
+        server.registerCallback(message -> {
+            int command = message.getCommand();
+            switch (command) {
+                case ServerCommands.REGISTER_FAILED:
+                    JOptionPane.showMessageDialog(this, "This login is already taken");
+                    break;
+                case ServerCommands.REGISTER_SUCCESS:
+                    JOptionPane.showMessageDialog(this, "Successful registration");
+                    dispose();
+                    break;
+            }
+        });
+
         registrationButton.addActionListener(e -> {
-            if (login.getText().equals("") || Arrays.toString(passwordAgainField.getPassword()).equals("") || Arrays.toString(passwordField.getPassword()).equals("")) {
+            if (login.getText().length() == 0 || passwordAgainField.getPassword().length == 0 || passwordField.getPassword().length == 0) {
                 JOptionPane.showMessageDialog(this, "Fill in all the fields");
             } else if (!Arrays.equals(passwordField.getPassword(), passwordAgainField.getPassword())) {
                 JOptionPane.showMessageDialog(this, "Passwords do not match");
@@ -45,7 +58,6 @@ public class RegistrationDialog extends JFrame {
                 String password = new String(passwordField.getPassword());
                 LoginSet loginSet = new LoginSet(login.getText(), password);
                 server.sendMessage(new ServerMessage(ServerCommands.REGISTER,loginSet));
-                dispose();
             }
         });
 

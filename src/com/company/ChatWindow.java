@@ -10,9 +10,11 @@ public class ChatWindow extends JFrame {
 
     private Server server;
     private String userName;
+    private LoginSet loginSet;
 
-    public ChatWindow(Server server) {
+    public ChatWindow(Server server, LoginSet loginSet) {
         this.server = server;
+        this.loginSet = loginSet;
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(900, 600);
 
@@ -22,6 +24,11 @@ public class ChatWindow extends JFrame {
         chatArea.setWrapStyleWord(true);
 
         JTextField userNameField = new JTextField();
+        userNameField.setText(loginSet.getLogin());
+        userNameField.setEditable(false);
+
+        userName = userNameField.getText();
+
         JTextField messageField = new JTextField();
         JScrollPane scrollChat = new JScrollPane(chatArea);
 
@@ -44,7 +51,6 @@ public class ChatWindow extends JFrame {
                     chatArea.setText(chatArea.getText() + data);
                     break;
             }
-
         });
 
 
@@ -57,8 +63,6 @@ public class ChatWindow extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    userName = userNameField.getText();
-                    userNameField.setEditable(false);
                     String word = messageField.getText();
                     server.sendMessage(new ServerMessage(ServerCommands.SEND_MESSAGE, userName + ": " + word));
                     messageField.setText("");

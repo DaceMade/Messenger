@@ -38,9 +38,26 @@ public class LoginDialog extends JFrame {
             new RegistrationDialog(server).setVisible(true);
         });
 
+        server.registerCallback(message -> {
+            int command = message.getCommand();
+            switch (command) {
+                case ServerCommands.LOGIN_SUCCESS:
+                    dispose();
+                    new ChatWindow(server, (LoginSet) message.getData()).setVisible(true);
+                    break;
+                case ServerCommands.INCORRECT_PASSWORD:
+                    JOptionPane.showMessageDialog(this, "Incorrect password");
+                    break;
+                case ServerCommands.INCORRECT_LOGIN:
+                    JOptionPane.showMessageDialog(this, "Incorrect login");
+                    break;
+            }
+        });
+
         loginButton.addActionListener(e -> {
-            new ChatWindow(server).setVisible(true);
-            dispose();
+            String password = new String(passwordField.getPassword());
+            LoginSet loginSet = new LoginSet(login.getText(), password);
+            server.sendMessage(new ServerMessage(ServerCommands.LOGIN, loginSet));
         });
 
         pack();
